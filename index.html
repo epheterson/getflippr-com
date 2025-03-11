@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flippr - A Simple Coin Flip App</title>
+    <title>Flippr - Your Daily Moment</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <style>
         :root {
@@ -11,7 +11,8 @@
             --text-light: #f8f8f8;
             --accent: #FFD700;
             --bg-dark: #202020;
-            --card-bg: rgba(255, 255, 255, 0.9);
+            --card-bg: rgba(255, 255, 255, 0.97);
+            --coin-gold: #e6c200;
         }
         
         body, html {
@@ -21,6 +22,7 @@
             line-height: 1.6;
             color: var(--bg-dark);
             scroll-behavior: smooth;
+            background-color: #222;
         }
         
         .wood-bg {
@@ -32,30 +34,45 @@
         
         header {
             text-align: center;
-            padding: 100px 20px 60px;
+            padding: 100px 20px 70px;
             color: var(--text-light);
             position: relative;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(3px);
+        }
+        
+        .app-icon-container {
+            display: inline-block;
+            margin-bottom: 20px;
+            background: linear-gradient(to bottom right, #333, #111);
+            padding: 15px;
+            border-radius: 30px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
         }
         
         .app-icon {
-            width: 120px;
-            height: 120px;
-            border-radius: 24px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            width: 100px;
+            height: 100px;
+            border-radius: 22px;
+            display: block;
         }
         
         h1 {
-            font-size: 3.5rem;
+            font-size: 4.5rem;
             margin: 0;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            font-weight: 700;
+            letter-spacing: -1px;
         }
         
         .tagline {
-            font-size: 1.4rem;
-            margin-top: 10px;
+            font-size: 1.5rem;
+            margin-top: 12px;
             font-weight: 300;
             text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
         .download-btn {
@@ -63,35 +80,84 @@
             margin-top: 30px;
             background-color: #000;
             color: #fff;
-            padding: 12px 30px;
+            padding: 15px 34px;
             border-radius: 30px;
             text-decoration: none;
             font-weight: 500;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            font-size: 1.1rem;
         }
         
         .download-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            background-color: #111;
         }
         
         .container {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
             padding: 0 20px;
         }
         
+        section {
+            padding: 80px 0;
+        }
+        
+        .intro {
+            background-color: var(--wood-brown);
+            color: var(--text-light);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .intro::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('images/wood-background.jpg') center center;
+            background-size: cover;
+            opacity: 0.15;
+            z-index: 0;
+        }
+        
+        .intro-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .intro-title {
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+            line-height: 1.2;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .intro-description {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            line-height: 1.7;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
         .features {
-            padding: 60px 0;
-            background-color: rgba(255, 255, 255, 0.97);
+            background-color: var(--card-bg);
+            position: relative;
         }
         
         .section-title {
             text-align: center;
-            margin-bottom: 40px;
-            font-size: 2.2rem;
+            margin-bottom: 50px;
+            font-size: 2.4rem;
             color: var(--wood-brown);
+            font-weight: 600;
         }
         
         .feature-grid {
@@ -102,129 +168,534 @@
         
         .feature-card {
             background-color: #fff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
             text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
         }
         
         .feature-icon {
-            font-size: 36px;
+            font-size: 40px;
             color: var(--wood-brown);
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         
         .feature-title {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .feature-description {
+            color: #555;
+            font-size: 1.05rem;
         }
         
         .screenshots {
-            padding: 60px 0;
             background-color: var(--bg-dark);
             color: var(--text-light);
+            position: relative;
         }
         
-        .screenshot-grid {
+        .showcase-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
             margin-top: 40px;
         }
         
-        .screenshot {
-            border-radius: 16px;
+        .showcase-item {
+            border-radius: 18px;
             overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-            transition: transform 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            height: 100%;
         }
         
-        .screenshot:hover {
-            transform: translateY(-5px);
+        .showcase-item.moments {
+            grid-column: span 3;
+            display: flex;
+            align-items: center;
+            background-color: rgba(139, 69, 19, 0.2);
+            padding: 30px;
         }
         
-        .screenshot img {
+        .moments-content {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            width: 100%;
+            gap: 40px;
+        }
+        
+        .moments-text {
+            flex: 1;
+        }
+        
+        .moments-image {
+            flex: 1;
+            max-width: 300px;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transform: rotate(1deg);
+        }
+        
+        .moments-title {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            line-height: 1.2;
+            color: var(--text-light);
+        }
+        
+        .moments-description {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            opacity: 0.9;
+        }
+        
+        .showcase-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+        }
+        
+        .showcase-item img {
             width: 100%;
             height: auto;
             display: block;
+            transition: transform 0.5s ease;
+        }
+        
+        .showcase-item:hover img {
+            transform: scale(1.03);
+        }
+        
+        .platforms {
+            padding: 60px 0;
+            background: linear-gradient(to bottom, #333, #222);
+            color: var(--text-light);
+            text-align: center;
+        }
+        
+        .platforms-description {
+            max-width: 700px;
+            margin: 0 auto 40px;
+            font-size: 1.1rem;
+        }
+        
+        .platform-icons {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin-top: 20px;
+        }
+        
+        .platform-icon {
+            font-size: 2.5rem;
+            color: var(--text-light);
+        }
+        
+        .testimonials {
+            background-color: var(--card-bg);
+            padding: 80px 0;
+        }
+        
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .testimonial {
+            background-color: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        
+        .testimonial-text {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            font-style: italic;
+            color: #444;
+        }
+        
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--wood-brown);
+        }
+        
+        .quote-mark {
+            font-size: 4rem;
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            color: rgba(139, 69, 19, 0.1);
+            font-family: Georgia, serif;
         }
         
         .support {
             padding: 80px 0;
-            background-color: rgba(255, 255, 255, 0.97);
+            background: url('images/wood-background.jpg');
+            background-size: cover;
+            background-position: center;
             text-align: center;
+            position: relative;
+        }
+        
+        .support::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        
+        .support-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .support-title {
+            color: var(--text-light);
+            margin-bottom: 30px;
+        }
+        
+        .support-description {
+            max-width: 600px;
+            margin: 0 auto 30px;
+            font-size: 1.2rem;
+            color: var(--text-light);
         }
         
         .email-link {
             display: inline-block;
             margin-top: 20px;
-            color: var(--wood-brown);
-            font-size: 1.2rem;
+            color: var(--text-light);
+            font-size: 1.4rem;
             text-decoration: none;
-            border-bottom: 2px solid var(--accent);
-            padding-bottom: 2px;
-            transition: color 0.3s ease;
+            font-weight: 500;
+            transition: color 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+            border: 2px solid var(--text-light);
+            padding: 12px 30px;
+            border-radius: 30px;
         }
         
         .email-link:hover {
-            color: var(--accent);
+            background-color: var(--text-light);
+            color: var(--wood-brown);
+            transform: translateY(-3px);
         }
         
         footer {
-            background-color: var(--bg-dark);
+            background-color: #111;
             color: var(--text-light);
             text-align: center;
             padding: 30px 0;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+        }
+        
+        .privacy-link {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            margin-top: 10px;
+            display: inline-block;
+            cursor: pointer;
+        }
+        
+        .privacy-link:hover {
+            color: #fff;
+        }
+        
+        /* Modal Privacy Policy */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.7);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal.show {
+            display: block;
+            opacity: 1;
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 50px auto;
+            padding: 40px;
+            border-radius: 12px;
+            max-width: 800px;
+            width: 90%;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.3);
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            transition: transform 0.3s ease;
+            transform: translateY(-20px);
+        }
+        
+        .modal.show .modal-content {
+            transform: translateY(0);
+        }
+        
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #aaa;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            border-radius: 50%;
+        }
+        
+        .close-button:hover {
+            color: #333;
+            background-color: #f0f0f0;
+        }
+        
+        .privacy-title {
+            color: var(--wood-brown);
+            font-size: 2.2rem;
+            margin-top: 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+        
+        .last-updated {
+            font-style: italic;
+            color: #777;
+            margin-bottom: 30px;
+        }
+        
+        .privacy-section {
+            margin-bottom: 25px;
+        }
+        
+        .privacy-heading {
+            color: var(--wood-brown);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            margin-top: 30px;
+        }
+        
+        .privacy-text {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: #444;
+        }
+        
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(1deg); }
+            50% { transform: translateY(-10px) rotate(1deg); }
+        }
+        
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .pulse-animation {
+            animation: pulse 4s ease-in-out infinite;
         }
         
         /* Responsive adjustments */
+        @media (max-width: 900px) {
+            .showcase-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .showcase-item.moments {
+                grid-column: span 2;
+            }
+            
+            .moments-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .moments-image {
+                order: -1;
+                margin-bottom: 20px;
+            }
+            
+            .platform-icons {
+                gap: 30px;
+            }
+            
+            .modal-content {
+                padding: 30px;
+                margin: 30px auto;
+                width: 95%;
+            }
+        }
+        
         @media (max-width: 768px) {
+            h1 {
+                font-size: 3rem;
+            }
+            
+            .tagline {
+                font-size: 1.3rem;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            header {
+                padding: 80px 20px 50px;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .moments-title {
+                font-size: 1.8rem;
+            }
+            
+            section {
+                padding: 60px 0;
+            }
+            
+            .email-link {
+                font-size: 1.2rem;
+            }
+            
+            .privacy-title {
+                font-size: 1.8rem;
+            }
+            
+            .privacy-heading {
+                font-size: 1.3rem;
+            }
+            
+            .intro-title {
+                font-size: 2rem;
+            }
+            
+            .intro-description {
+                font-size: 1.1rem;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .showcase-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .showcase-item.moments {
+                grid-column: span 1;
+            }
+        }
+        
+        @media (max-width: 480px) {
             h1 {
                 font-size: 2.5rem;
             }
             
             .tagline {
-                font-size: 1.2rem;
+                font-size: 1.1rem;
             }
             
-            .feature-grid,
-            .screenshot-grid {
-                grid-template-columns: 1fr;
+            .app-icon {
+                width: 80px;
+                height: 80px;
             }
             
-            header {
-                padding: 80px 20px 40px;
+            .download-btn {
+                padding: 12px 25px;
+                font-size: 1rem;
             }
         }
     </style>
 </head>
 <body class="wood-bg">
     <header>
-        <img src="images/app-icon.png" alt="Flippr App Icon" class="app-icon">
+        <div class="app-icon-container">
+            <img src="images/app-icon.jpg" alt="Flippr App Icon" class="app-icon">
+        </div>
         <h1>Flippr</h1>
-        <p class="tagline">Your Daily Moment</p>
+        <p class="tagline">More than a coin flip. Your daily moment.</p>
         <a href="https://apps.apple.com/us/app/coin-flippr/id6471815635" class="download-btn">Download on the App Store</a>
     </header>
     
+    <section class="intro">
+        <div class="container intro-content">
+            <h2 class="intro-title">Elevate Your Decision Making</h2>
+            <p class="intro-description">Flippr transforms the humble coin toss into a meaningful ritual. Beautiful animations, insightful statistics, and daily prompts turn snap decisions into moments of intention.</p>
+        </div>
+    </section>
+    
     <section class="features">
         <div class="container">
-            <h2 class="section-title">Why Flippr?</h2>
+            <h2 class="section-title">Why You'll Love Flippr</h2>
             <div class="feature-grid">
                 <div class="feature-card">
-                    <div class="feature-icon">🎯</div>
-                    <h3 class="feature-title">Simple Decision Making</h3>
-                    <p>Elegant coin flips with beautiful animation and satisfying haptic feedback.</p>
+                    <div class="feature-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8B4513" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M12 8v4l3 3"></path>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Beautiful Simplicity</h3>
+                    <p class="feature-description">A gorgeously animated coin flip with satisfying haptic feedback that makes each decision feel significant and deliberate.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h3 class="feature-title">Detailed Statistics</h3>
-                    <p>Track your flip history, streaks, and usage patterns over time.</p>
+                    <div class="feature-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8B4513" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Insightful Statistics</h3>
+                    <p class="feature-description">Track your flip history, explore probability, and watch your streaks grow over time with detailed analytics.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">✨</div>
+                    <div class="feature-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8B4513" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                            <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                            <line x1="6" y1="1" x2="6" y2="4"></line>
+                            <line x1="10" y1="1" x2="10" y2="4"></line>
+                            <line x1="14" y1="1" x2="14" y2="4"></line>
+                        </svg>
+                    </div>
                     <h3 class="feature-title">Daily Moments</h3>
-                    <p>Thoughtful prompts that transform simple flips into meaningful actions.</p>
+                    <p class="feature-description">Each day brings a thoughtful prompt to inspire mindful action. Flip to decide whether to embrace today's suggestion, or make your own.</p>
                 </div>
             </div>
         </div>
@@ -232,42 +703,152 @@
     
     <section class="screenshots">
         <div class="container">
-            <h2 class="section-title" style="color: var(--text-light);">Screenshots</h2>
-            <div class="screenshot-grid">
-                <div class="screenshot">
-                    <img src="images/screenshot-1.jpg" alt="Flippr main screen">
+            <h2 class="section-title" style="color: var(--text-light);">The Flippr Experience</h2>
+            
+            <div class="showcase-grid">
+                <div class="showcase-item moments">
+                    <div class="moments-content">
+                        <div class="moments-text">
+                            <h3 class="moments-title">Daily Moments for Intentional Living</h3>
+                            <p class="moments-description">Transform quick decisions into meaningful actions. Each day brings a new prompt designed to inspire mindfulness and personal growth.</p>
+                        </div>
+                        <div class="moments-image float-animation">
+                            <img src="images/screenshot-3.jpg" alt="Flippr Daily Moments feature">
+                        </div>
+                    </div>
                 </div>
-                <div class="screenshot">
-                    <img src="images/screenshot-2.jpg" alt="Flippr statistics view">
+                
+                <div class="showcase-item">
+                    <img src="images/screenshot-1.jpg" alt="Flippr main interface with coin">
                 </div>
-                <div class="screenshot">
-                    <img src="images/screenshot-3.jpg" alt="Flippr moments feature">
+                
+                <div class="showcase-item">
+                    <img src="images/screenshot-2.jpg" alt="Flippr detailed statistics view">
                 </div>
-                <div class="screenshot">
-                    <img src="images/screenshot-4.jpg" alt="Flippr widgets">
+                
+                <div class="showcase-item">
+                    <img src="images/screenshot-4.jpg" alt="Flippr home screen widgets">
                 </div>
-                <div class="screenshot">
+            </div>
+        </div>
+    </section>
+
+    <section class="platforms">
+        <div class="container">
+            <h2 class="section-title" style="color: var(--text-light);">Available Everywhere You Are</h2>
+            <p class="platforms-description">Flippr works seamlessly across your Apple devices. Use it on your iPhone, add it to your Home Screen widgets, or access it from your Mac menu bar for quick decisions anywhere.</p>
+        </div>
+    </section>
+
+    <section class="mac-showcase">
+        <div class="container">
+            <div class="showcase-grid mac-grid">
+                <div class="showcase-item">
+                    <img src="images/screenshot-7.jpg" alt="Flippr Lock Screen Widgets and Apple Watch app">
+                </div>
+                
+                <div class="showcase-item">
                     <img src="images/screenshot-6.jpg" alt="Flippr on macOS window">
                 </div>
-                <div class="screenshot">
+                
+                <div class="showcase-item">
                     <img src="images/screenshot-5.jpg" alt="Flippr macOS menu bar">
                 </div>
             </div>
         </div>
     </section>
-    
+
     <section class="support">
-        <div class="container">
-            <h2 class="section-title">Support</h2>
-            <p>Need help or have suggestions? I'd love to hear from you!</p>
+        <div class="container support-content">
+            <h2 class="section-title support-title">Get in Touch</h2>
+            <p class="support-description">Have questions, suggestions, or just want to share your experience? I'd love to hear from you!</p>
             <a href="mailto:sup@getflippr.com" class="email-link">sup@getflippr.com</a>
         </div>
     </section>
     
     <footer>
         <div class="container">
-            <p>&copy; 2025 GOOD Inc. All rights reserved.</p>
+            <p>&copy; 2025 elp</p>
+            <span class="privacy-link" id="privacy-link">Privacy Policy</span>
         </div>
     </footer>
+    
+    <!-- Privacy Policy Modal -->
+    <div id="privacy-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="close-privacy">&times;</span>
+            <h2 class="privacy-title">Privacy Policy</h2>
+            <p class="last-updated">Last updated: March 9, 2025</p>
+            
+            <div class="privacy-section">
+                <p class="privacy-text">This Privacy Policy describes how your personal information is handled when you use Flippr ("the App").</p>
+            </div>
+            
+            <div class="privacy-section">
+                <h3 class="privacy-heading">What Information We Collect</h3>
+                <p class="privacy-text">Flippr is designed with privacy in mind. We do not collect, use, or share any personal information about you. All app data, including your flip history and statistics, is stored locally on your device.</p>
+            </div>
+            
+            <div class="privacy-section">
+                <h3 class="privacy-heading">Local Storage Only</h3>
+                <p class="privacy-text">All information generated by the app (such as coin flip results, statistics, and preferences) is stored only on your device and is never transmitted to our servers or any third parties.</p>
+            </div>
+            
+            <div class="privacy-section">
+                <h3 class="privacy-heading">No Analytics or Tracking</h3>
+                <p class="privacy-text">Flippr does not include any analytics, tracking, or advertising systems. We have no way to track your usage of the app or collect any information about you.</p>
+            </div>
+            
+            <div class="privacy-section">
+                <h3 class="privacy-heading">Third-Party Services</h3>
+                <p class="privacy-text">The app does not use any third-party services that might collect information about you.</p>
+            </div>
+            
+            <div class="privacy-section">
+                <h3 class="privacy-heading">Your Rights</h3>
+                <p class="privacy-text">Since we don't collect any personal data, there's no personal information for you to access, modify, or delete. You have complete control over all data generated within the app on your device.</p>
+            </div>
+            
+            <div class="privacy-section">
+                <h3 class="privacy-heading">Children's Privacy</h3>
+                <p class="privacy-text">Our app is suitable for users of all ages. We do not knowingly collect personal information from anyone, including children under the age of 13.</p>
+            </div>
+            
+            <div class="privacy-section">
+                <h3 class="privacy-heading">Changes to This Policy</h3>
+                <p class="privacy-text">We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page. Changes to this Privacy Policy are effective when they are posted on this page.</p>
+            </div>
+            
+            <div class="privacy-section">
+                <h3 class="privacy-heading">Contact Us</h3>
+                <p class="privacy-text">If you have any questions about this Privacy Policy, please contact us at:</p>
+                <p class="privacy-text"><a href="mailto:sup@getflippr.com">sup@getflippr.com</a></p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Privacy Policy Modal Functionality
+        const modal = document.getElementById("privacy-modal");
+        const privacyLink = document.getElementById("privacy-link");
+        const closeButton = document.getElementById("close-privacy");
+        
+        privacyLink.onclick = function() {
+            modal.classList.add("show");
+            document.body.style.overflow = "hidden";
+        }
+        
+        closeButton.onclick = function() {
+            modal.classList.remove("show");
+            document.body.style.overflow = "auto";
+        }
+        
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.classList.remove("show");
+                document.body.style.overflow = "auto";
+            }
+        }
+    </script>
 </body>
 </html>
